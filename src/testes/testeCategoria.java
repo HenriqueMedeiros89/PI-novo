@@ -14,8 +14,10 @@ public class testeCategoria {
         Categoria categoria = new Categoria();
         categoria.setNome("Filme");
         categoria.setTipo('F');
-
-        CategoriaDAO.inserir(categoria);
+        
+        categoria.setId(1);
+        CategoriaDAO.alterar(categoria);
     }
-
+    
 }
+

@@ -45,7 +45,6 @@ public class CategoriaDAO {
             return nrLinhas > 0;
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
             return false;
         }
     }

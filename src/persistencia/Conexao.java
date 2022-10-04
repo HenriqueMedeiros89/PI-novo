@@ -13,8 +13,8 @@ public class Conexao {
     
     public static Connection getConexao() {
         try {
-            //return DriverManager.getConnection("jbdc:mysql://localhost:3306/projeto","root","123qwe@");
-            return DriverManager.getConnection("jbdc:mysql://localhost:3306/projeto","root","Dobi_203242");
+            return DriverManager.getConnection("jbdc:mysql://localhost:3306/projeto","root","123qwe@");
+            //return DriverManager.getConnection("jbdc:mysql://localhost:3306/projeto","root","Dobi_203242");
         } catch (Exception erro) {
             throw new RuntimeException(erro);
         }
