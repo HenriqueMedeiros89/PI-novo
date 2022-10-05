@@ -93,7 +93,7 @@ public class JogoDAO {
                 j.setMemoria(res.getInt("memoria"));
                 j.setNumeroDias(res.getInt("numeroDias"));
                 j.setPreco(res.getDouble("preco"));
-                j.setTipo(res.getString("tipo").charAt(0));
+                j.setTipo(res.getString("tipo"));
                 j.setTitulo(res.getString("titulo"));
                 listaJogos.add(j);
 

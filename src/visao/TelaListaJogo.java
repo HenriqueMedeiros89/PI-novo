@@ -8,19 +8,21 @@ package visao;
 import entidades.Jogo;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
 import persistencia.JogoDAO;
+
 public class TelaListaJogo extends javax.swing.JFrame {
+
     private List<Jogo> listaJogos;
+
     /**
      * Creates new form TelaListaJogo
      */
-    public void TelaListaJogo(){
+    public void TelaListaJogo() {
         initComponents();
-        listarJogos();
+        montarlistaJogos();
     }
-    
-    
+
     public TelaListaJogo() {
         initComponents();
     }
@@ -121,14 +123,14 @@ public class TelaListaJogo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-       new TelaCadastroJogo((this).setVisible(true);
+        new TelaCadastroJogo(this).setVisible(true);
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-       int linha = tabJogos.getSelectedRow();
+        int linha = tabJogos.getSelectedRow();
         if (linha == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um jogo para alterar!");
-        }else{
+        } else {
             TelaCadastroJogo cadastro = new TelaCadastroJogo(this);
             cadastro.setJogo(listaJogos.get(linha));
             cadastro.setVisible(true);
@@ -139,9 +141,19 @@ public class TelaListaJogo extends javax.swing.JFrame {
         int linha = tabJogos.getSelectedRow();
         if (linha == -1) {
             JOptionPane.showMessageDialog(this, "Selecione um jogo para excluir!");
-        }else{
+        } else {
             Jogo jogo = listaJogos.get(linha);
-            String mensagem = JOptionPane.showMessageDialog(this, "");
+            String mensagem = "Deseja realmente excluir o jogo " + jogo.getTitulo() + "?";
+            int opcao = JOptionPane.showConfirmDialog(this, mensagem, "Confirme a exclusão!", JOptionPane.YES_NO_OPTION);
+
+            if (opcao == JOptionPane.YES_OPTION) {
+                if (JogoDAO.excluir(jogo.getId())) {
+                    montarlistaJogos();
+                    JOptionPane.showMessageDialog(this, "Categoria excluida com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao excluir Jogo!");
+                }
+            }
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -181,6 +193,21 @@ public class TelaListaJogo extends javax.swing.JFrame {
         });
     }
 
+    public void montarlistaJogos() {
+        listaJogos = JogoDAO.listar();
+        DefaultTableModel modelo = (DefaultTableModel) tabJogos.getModel();
+        modelo.setRowCount(0);
+        for (Jogo jogo : listaJogos) {
+            Object[] linha = {
+                jogo.getTitulo(),
+                jogo.getCategoria().getNome(),
+                jogo.getPreco(),
+                jogo.getNumeroDias()
+            };
+            modelo.addRow(linha);
+        }
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnExcluir;
@@ -188,4 +215,8 @@ public class TelaListaJogo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabJogos;
     // End of variables declaration//GEN-END:variables
+
+    void listarJogos() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

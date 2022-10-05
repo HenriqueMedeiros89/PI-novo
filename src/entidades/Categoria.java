@@ -10,6 +10,7 @@ package entidades;
  * @author henrique.medeiros
  */
 public class Categoria {
+
     private int id;
     private String nome;
     private char tipo;
@@ -55,5 +56,37 @@ public class Categoria {
     public void setTipo(char tipo) {
         this.tipo = tipo;
     }
-    
+
+    public String getNomeTipo() {
+        return tipo == 'F' ? "Filme" : "Jogo";
+    }
+
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Categoria other = (Categoria) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+
+    }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
+
 }

@@ -18,7 +18,7 @@ public class TelaCadastroCategoria extends javax.swing.JFrame {
     private Categoria categoria = new Categoria();
     private TelaListaCategoria telaListagem;
 
-    public TelaCadastroCategoria(TelaListaCategora telaListagem) {
+    public TelaCadastroCategoria(TelaListaCategoria telaListagem) {
         initComponents();
         this.telaListagem = telaListagem;
     }

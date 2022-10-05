@@ -4,7 +4,7 @@ public class Jogo extends Item{
     private int memoria;
     private int id;
     private String nome;
-    private char tipo;
+    private String tipo;
 
     public Jogo(Categoria categoria) {
         super(categoria);
@@ -41,14 +41,14 @@ public class Jogo extends Item{
     /**
      * @return the tipo
      */
-    public char getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
     /**
      * @param tipo the tipo to set
      */
-    public void setTipo(char tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 

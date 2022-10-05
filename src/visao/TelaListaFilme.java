@@ -5,40 +5,22 @@
  */
 package visao;
 
-import entidades.Categoria;
-import java.util.ArrayList;
+import entidades.Filme;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import persistencia.CategoriaDAO;
+import persistencia.FilmeDAO;
 
-/**
- *
- * @author henrique.medeiros
- */
-public class TelaListaCategoria extends javax.swing.JFrame {
+public class TelaListaFilme extends javax.swing.JFrame {
 
-    ArrayList<Categoria> categorias;
+    private List<Filme> listaFilmes;
 
     /**
-     * Creates new form TelaListaCategoria
+     * Creates new form TelaListaFilme
      */
-    public TelaListaCategoria() {
+    public TelaListaFilme() {
         initComponents();
-        montarListaCategorias();
-    }
-
-    public void montarListaCategorias() {
-        categorias = CategoriaDAO.listar();
-        DefaultTableModel conteudo = (DefaultTableModel) tbLista_Categoria.getModel();
-        conteudo.setRowCount(0);
-        for (Categoria cat : categorias) {
-            Object[] linha = {
-                cat.getNome(),
-                cat.getNomeTipo()
-            };
-
-            conteudo.addRow(linha);
-        }
+        montarListaFilmes();
     }
 
     /**
@@ -53,8 +35,8 @@ public class TelaListaCategoria extends javax.swing.JFrame {
         btnNovo = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbLista_Categoria = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbListaFilmes = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,26 +61,28 @@ public class TelaListaCategoria extends javax.swing.JFrame {
             }
         });
 
-        tbLista_Categoria.setModel(new javax.swing.table.DefaultTableModel(
+        tbListaFilmes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Categoria", "Tipo"
+                "Titulo", "Categoria", "Preço", "N° Dias"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tbLista_Categoria);
-        if (tbLista_Categoria.getColumnModel().getColumnCount() > 0) {
-            tbLista_Categoria.getColumnModel().getColumn(0).setResizable(false);
-            tbLista_Categoria.getColumnModel().getColumn(1).setResizable(false);
+        jScrollPane1.setViewportView(tbListaFilmes);
+        if (tbListaFilmes.getColumnModel().getColumnCount() > 0) {
+            tbListaFilmes.getColumnModel().getColumn(0).setResizable(false);
+            tbListaFilmes.getColumnModel().getColumn(1).setResizable(false);
+            tbListaFilmes.getColumnModel().getColumn(2).setResizable(false);
+            tbListaFilmes.getColumnModel().getColumn(3).setResizable(false);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -106,70 +90,67 @@ public class TelaListaCategoria extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(btnNovo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAlterar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnExcluir)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnNovo)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAlterar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnExcluir))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNovo)
                     .addComponent(btnAlterar)
                     .addComponent(btnExcluir))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        int linha = tbLista_Categoria.getSelectedRow();
-        if (linha > -1) {
-            Categoria categoria = categorias.get(linha);
-            int opcao = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir a categoria " + categoria.getNome() + "?", " Confirme a exclusão", JOptionPane.YES_NO_OPTION);
-
-            if (opcao == JOptionPane.YES_OPTION) {
-                if (CategoriaDAO.excluir(categoria.getId())) {
-                    JOptionPane.showMessageDialog(this, "Categoria excluida com sucesso!");
-                    montarListaCategorias();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao excluir a categoria "
-                            + categoria.getNome() + ".");
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione uma categoria para excluir!");
-        }
-
-    }//GEN-LAST:event_btnExcluirActionPerformed
-
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        new TelaCadastroCategoria(this).setVisible(true);
+        new TelaCadastroFilme(this).setVisible(true);
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        int linha = tbLista_Categoria.getSelectedRow();
-        if(linha == -1){
-            JOptionPane.showInternalMessageDialog(this, "Selecione uma categoria!");
-            
-        }else{
-            Categoria categoria = categorias.get(linha);
-            TelaCadastroCategoria cadCategoria = new TelaCadastroCategoria(this);
-            
-            cadCategoria.setCategoria(categoria);
-            cadCategoria.setVisible(true);
+        int linha = tbListaFilmes.getSelectedRow();
+        if (linha == - 1) {
+            JOptionPane.showMessageDialog(null, "Selecione um filme para alterar!");
+        } else {
+            TelaCadastroFilme cadastro = new TelaCadastroFilme(this);
+            cadastro.setFilme(listaFilmes.get(linha));
+            cadastro.setVisible(true);
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int linha = tbListaFilmes.getSelectedRow();
+        if (linha == - 1) {
+            JOptionPane.showMessageDialog(null, "Selecione um filme para excluir!");
+        } else {
+            Filme filme = listaFilmes.get(linha);
+            String mensagem = "Deseja relamente excluir o filme " + filme.getTitulo() + "?";
+            int opcao = JOptionPane.showConfirmDialog(this, mensagem, "confirme a exclusão", JOptionPane.YES_NO_OPTION);
+            
+            if (opcao == JOptionPane.YES_OPTION) {
+                if (FilmeDAO.excluir(filme.getId())) {
+                    montarLisataFilmes();
+                    JOptionPane.showMessageDialog(this, "Filme excluir com ")
+                    
+                }
+                
+            }
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,20 +169,20 @@ public class TelaListaCategoria extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaListaCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaListaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaListaCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaListaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaListaCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaListaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaListaCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaListaFilme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaListaCategoria().setVisible(true);
+                new TelaListaFilme().setVisible(true);
             }
         });
     }
@@ -210,7 +191,7 @@ public class TelaListaCategoria extends javax.swing.JFrame {
     private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tbLista_Categoria;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbListaFilmes;
     // End of variables declaration//GEN-END:variables
 }
